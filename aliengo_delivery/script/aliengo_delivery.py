@@ -2,6 +2,7 @@
 
 import rospy
 import actionlib
+from actionlib_msgs.msg import GoalID
 from aliengo_move import move_handler
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from tf.transformations import quaternion_from_euler,euler_from_quaternion
@@ -41,8 +42,11 @@ def callbackodom_aliengo(data):
     time.sleep(1)
     actionMsg.ACTION = actionMsg.ROBOT_FALLS
     action_pub.publish(actionMsg)
-    time.sleep(1)
-
+    # time.sleep(3)
+    # cancel_move()
+  elif( abs(roll)< 0.3):
+    aliengo_down = True
+    
 def callbackodom_box(data):
   global box_dropped
   if(data.pose.pose.position.z<0.3 and box_dropped):
@@ -53,9 +57,24 @@ def callbackodom_box(data):
     actionMsg.ACTION = actionMsg.BOX_FALLS
     action_pub.publish(actionMsg)
     time.sleep(1)
+    
 
+
+def cancel_move():
+  cancel_pub = rospy.Publisher('/move_base/cancel', GoalID, queue_size=10)
+  rate = rospy.Rate(10)
+  for i in range(1000):
+    msgs = GoalID()
+    cancel_pub.publish(msgs)
+    rate.sleep()
 
 def spawn_robot():
+#   os.system(r'''rostopic pub /move_base/cancel actionlib_msgs/GoalID "stamp:
+#   secs: 0
+#   nsecs: 0
+# id: ''" 
+# ''')
+  rospy
   rospy.wait_for_service("/gazebo/spawn_urdf_model")
   file_localition = roslib.packages.get_pkg_dir('aliengo_description') + '/xacro/robot.xacro'
   p = os.popen("rosrun xacro xacro " + file_localition)
@@ -69,7 +88,7 @@ def spawn_robot():
   req.model_name = name
   try:
     res = srv_delete_model(name)
-  except rospy.ServiceException, e:
+  except rospy.ServiceException as e:
     rospy.logdebug("Model %s does not exist in gazebo.", name)
 
   object_pose = Pose()
@@ -87,6 +106,8 @@ def spawn_robot():
   req.initial_pose = object_pose
 
   res = srv_spawn_model(req)
+  time.sleep(0.5)
+  os.system(r'rosnode kill /laikago_gazebo/controller_spawner')
 
 def spawn_box():
  # pauseSim()
@@ -103,7 +124,7 @@ def spawn_box():
   req.model_name = name
   try:
     res = srv_delete_model(name)
-  except rospy.ServiceException, e:
+  except rospy.ServiceException as e:
     rospy.logdebug("Model %s does not exist in gazebo.", name)
 
   object_pose = Pose()
@@ -129,6 +150,7 @@ if __name__ == '__main__':
   rospy.Subscriber("/aliengo/odometry", Odometry,  callbackodom_aliengo)
   rospy.Subscriber("/box/odometry", Odometry, callbackodom_box)
   action_pub = rospy.Publisher("/smach/input", RoverActionMsg, queue_size=1)
+  action_stop = rospy.Publisher("/move_base/cancel", GoalID, queue_size=10)
   actionMsg = RoverActionMsg()
   move_handler = move_handler()
 
@@ -148,9 +170,12 @@ if __name__ == '__main__':
           action_pub.publish(actionMsg)
 
       if(stateMsg.state == stateMsg.WALKING_IDLE_1):
-        x = [-5.364326,-5.151546]
-        y = [5.051377, 8.126664]
-        yaw = [1.555206, 1.582429]
+        # x = [-5.364326,-5.151546]
+        # y = [5.051377, 8.126664]
+        # yaw = [1.555206, 1.582429]
+        x = [-5.221546]
+        y = [ 8.126664]
+        yaw = [1.582429]
         if(move_handler.movebase_client(x,y,yaw)):
           actionMsg.ACTION = actionMsg.FIRST_GOAL_FINISHED
           action_pub.publish(actionMsg)

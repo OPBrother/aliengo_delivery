@@ -11,7 +11,7 @@ class status_handler:
 
     def start(self):
     	self.state_pub = rospy.Publisher("/smach/output", RoverStateMsg, queue_size=1)
-    	rospy.Subscriber("/smach/input",RoverActionMsg,self.state_callback)
+        rospy.Subscriber("/smach/input",RoverActionMsg,self.state_callback)
 
     def state_callback(self,data):
     	self.action.ACTION = data.ACTION

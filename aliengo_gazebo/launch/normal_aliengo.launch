@@ -27,7 +27,7 @@
 <!--GAREN ADDS END-->
 
     <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner" respawn="false" output="screen"
-          args="-urdf -x -4.4 -y 3.5 -z 1.0  -model laikago_gazebo -param robot_description -unpause"/> <!--y: 4.081438 -->
+          args="-urdf -x -4.4 -y 3.5 -z 0.7  -model laikago_gazebo -param robot_description -unpause"/> <!--y: 4.081438 -->
 
  <node pkg="gazebo_ros" type="spawn_model" name="urdf_spawner1" respawn="false" output="screen"
           args="-urdf -x -3.315299  -y 8.041826 -z 0.05  -model belt -file '$(find aliengo_gazebo)/world/moving_ground.urdf' -unpause"/>
@@ -39,7 +39,7 @@
     <rosparam file="$(find aliengo_gazebo)/config/robot_control.yaml" command="load"/>
 
     <!-- load the controllers -->
-    <node pkg="controller_manager" type="spawner" name="controller_spawner" respawn="false"
+    <node pkg="controller_manager" type="spawner" name="controller_spawner" respawn="true"
           output="screen" ns="/laikago_gazebo" args="joint_state_controller
           FL_hip_controller FL_thigh_controller FL_calf_controller
           FR_hip_controller FR_thigh_controller FR_calf_controller
@@ -58,11 +58,14 @@
 
 
 	<!--Champ-Garen Legged Controller with Foot Placement -->
-  	<!--include file="$(find aliengo_config)/launch/foot_planner.launch"/-->
+  	<include file="$(find aliengo_config)/launch/foot_planner.launch"/>
+
   	<include file="$(find aliengo_delivery)/launch/belt_control.launch"/>
   	<include file="$(find aliengo_navigation)/launch/move_base.launch"/>
 
-	<include file="$(find aliengo_config)/launch/foot_awareness.launch"/>
+	<!-- <include file="$(find aliengo_config)/launch/foot_awareness.launch"/> -->
+    <!-- <include file="$(find aliengo_config)/launch/foot_planner.launch"/> -->
+	<!-- <include file="$(find aliengo_gazebo)/launch/foot_controller.launch"/> -->
 
 <!--Champ-Garen Legged Controller without Foot Placement -->
   	<!--include file="$(find aliengo_config)/launch/bringup.launch"/-->

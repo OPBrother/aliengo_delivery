@@ -170,21 +170,21 @@ void QuadrupedFootController::controlLoop_(const ros::TimerEvent& event)
     if(linear_config){
        gait_config_.swing_height = 0.14;
        gait_config_.stance_duration = 0.4;
-       gait_config_.nominal_height =   0.35;
+       gait_config_.nominal_height =   0.32;//0.35
       // base_.setGaitConfig(gait_config_);
       // cout <<"linear"<<endl;
     }
     else if(angular_config){
        gait_config_.swing_height = 0.05;
        gait_config_.stance_duration = 0.4;
-       gait_config_.nominal_height =  0.35;
+       gait_config_.nominal_height =  0.32;//0.35
        base_.setGaitConfig(gait_config_);
        cout<<"angular"<<endl;
     }
     else if(hybrid_config){
-       gait_config_.swing_height = 0.1;
+       gait_config_.swing_height = 0.12;//0.1
        gait_config_.stance_duration = 0.4;
-       gait_config_.nominal_height =  0.35;
+       gait_config_.nominal_height =  0.32;//0.35
        base_.setGaitConfig(gait_config_);
        cout<<"hybrid"<<endl;
     }
