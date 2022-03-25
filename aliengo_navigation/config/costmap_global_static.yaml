@@ -1,7 +1,7 @@
-global_frame: odom
+global_frame: laikago_gazebo/odom
 rolling_window: false
 track_unknown_space: true
-map_topic: odom
+map_topic: laikago_gazebo/odom
 plugins:
   - {name: static,                  type: "costmap_2d::StaticLayer"}
   - {name: inflation,               type: "costmap_2d::InflationLayer"}

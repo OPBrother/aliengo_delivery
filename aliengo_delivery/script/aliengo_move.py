@@ -81,12 +81,12 @@ class move_handler:
     return False
   def movebase_client(self,x,y,yaw):
     print("waiting move_base server")
-    client = actionlib.SimpleActionClient('move_base',MoveBaseAction)
+    client = actionlib.SimpleActionClient('laikago_gazebo/move_base',MoveBaseAction)
     client.wait_for_server()
     print("finds move_base server")
     n_goals = 0
     goal = MoveBaseGoal()
-    goal.target_pose.header.frame_id = "odom"
+    goal.target_pose.header.frame_id = "laikago_gazebo/odom"
     print("move_base started")
     while (n_goals<len(x)):
         print("Current Goal: "+ str(n_goals) + "Total Goal: " + str(len(x)))

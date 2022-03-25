@@ -1,4 +1,4 @@
-global_frame: odom
+global_frame: laikago_gazebo/odom
 rolling_window: true
 
 plugins:

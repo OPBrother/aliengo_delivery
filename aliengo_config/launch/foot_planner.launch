@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="robot_name"       default="/"/>
+    <arg name="robot_name"       default="/laikago_gazebo"/>
     <arg name="joints_map_file"  default="$(find aliengo_config)/config/joints/joints.yaml"/>
     <arg name="links_map_file"   default="$(find aliengo_config)/config/links/links.yaml"/>
     <arg name="gait_config_file" default="$(find aliengo_config)/config/gait/gait.yaml"/>
@@ -16,7 +16,8 @@
         
         <node pkg="aliengo_base" name="aliengo_foot_controller" type="quadruped_foot_controller_node" output="screen">
             <param name="gazebo" value="$(arg gazebo)" />
-        </node>
+            <!-- <remap from="/aliengo/ref_odom" to="/aliengo/odometry" /> -->
+         </node>
 
         <rosparam command="load" ns="gait"       file="$(arg gait_config_file)" />
         <rosparam command="load" ns="links_map"  file="$(arg links_map_file)" />

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+ <!--  the robot_controller node -->
+  <node name="ur5_mp" pkg="ur5_notebook" type="ur5_mp.py" output="screen" />
+  <node name="ur5_gripper" pkg="ur5_notebook" type="ur5_gripper.py" output="screen"/>
+  <node name="blocks_spawner" pkg="ur5_notebook" type="blocks_spawner" output="screen" />
+
+
+  
+
+
+</launch>

@@ -1,0 +1,91 @@
+<launch>
+
+     <arg name="user_debug" default="false"/>
+  <arg name="first_tb3"  default="tb3_0"/>
+  <arg name="second_tb3"  default="tb3_1"/>
+  <arg name="third_tb3"  default="tb3_2"/>
+  <arg name="fourth_tb3"  default="tb3_3"/>
+ 
+  <arg name="first_tb3_x_pos" default="0.0"/>
+  <arg name="first_tb3_y_pos" default="0.0"/>
+  <arg name="first_tb3_z_pos" default="0.0"/>
+  <arg name="first_tb3_yaw"   default="1.57"/>
+ 
+  <arg name="second_tb3_x_pos" default="0.0"/>
+  <arg name="second_tb3_y_pos" default="0.5"/>
+  <arg name="second_tb3_z_pos" default="0.0"/>
+  <arg name="second_tb3_yaw"   default="1.57"/>
+ 
+  <arg name="third_tb3_x_pos" default="0.0"/>
+  <arg name="third_tb3_y_pos" default="1.0"/>
+  <arg name="third_tb3_z_pos" default="0.0"/>
+  <arg name="third_tb3_yaw"   default="1.57"/>
+ 
+  <arg name="fourth_tb3_x_pos" default="0.0"/>
+  <arg name="fourth_tb3_y_pos" default="1.5"/>
+  <arg name="fourth_tb3_z_pos" default="0.0"/>
+  <arg name="fourth_tb3_yaw"   default="1.57"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+ 
+  <group ns = "$(arg third_tb3)">
+   <param name="robot_description"
+           command="$(find xacro)/xacro --inorder '$(find aliengo_description)/xacro/robot.xacro'
+           DEBUG:=$(arg user_debug) "  />>
+ 
+     <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model $(arg third_tb3) -x $(arg third_tb3_x_pos) -y $(arg third_tb3_y_pos) -z $(arg third_tb3_z_pos) -Y $(arg third_tb3_yaw) -param robot_description" />
+
+    <rosparam file="$(find aliengo_gazebo)/config/robot_control.yaml" command="load"/>
+
+    <!-- load the controllers -->
+    <node pkg="controller_manager" type="spawner" name="controller_spawner" respawn="true"
+          output="screen"   ns="laikago_gazebo" args="joint_state_controller
+          FL_hip_controller FL_thigh_controller FL_calf_controller
+          FR_hip_controller FR_thigh_controller FR_calf_controller
+          RL_hip_controller RL_thigh_controller RL_calf_controller
+          RR_hip_controller RR_thigh_controller RR_calf_controller "/>
+
+    <!-- convert joint states to TF transforms for rviz, etc -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+          respawn="false"  output="screen">
+        <remap from="/joint_states" to="/laikago_gazebo/joint_states"/>
+</node>
+  </group>
+   	<include file="$(find aliengo_config)/launch/foot_planner.launch">
+        <arg name="robot_name"       default="$(arg third_tb3)"/>
+      </include>
+  <group ns = "$(arg fourth_tb3)">
+   <param name="robot_description"
+           command="$(find xacro)/xacro --inorder '$(find aliengo_description)/xacro/robot.xacro'
+           DEBUG:=$(arg user_debug) "  />>
+ 
+     <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model $(arg fourth_tb3) -x $(arg fourth_tb3_x_pos) -y $(arg fourth_tb3_y_pos) -z $(arg fourth_tb3_z_pos) -Y $(arg fourth_tb3_yaw) -param robot_description" />
+ 
+    <rosparam file="$(find aliengo_gazebo)/config/robot_control.yaml" command="load"/>
+
+    <!-- load the controllers -->
+    <node pkg="controller_manager" type="spawner" name="controller_spawner" respawn="true"
+          output="screen"   ns="laikago_gazebo" args="joint_state_controller
+          FL_hip_controller FL_thigh_controller FL_calf_controller
+          FR_hip_controller FR_thigh_controller FR_calf_controller
+          RL_hip_controller RL_thigh_controller RL_calf_controller
+          RR_hip_controller RR_thigh_controller RR_calf_controller "/>
+
+    <!-- convert joint states to TF transforms for rviz, etc -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"
+          respawn="false"  output="screen">
+        <remap from="/joint_states" to="/laikago_gazebo/joint_states"/>
+    </node>
+
+  </group>
+    	<include file="$(find aliengo_config)/launch/foot_planner.launch">
+        <arg name="robot_name"       default="$(arg fourth_tb3)"/>
+      </include>
+
+</launch>

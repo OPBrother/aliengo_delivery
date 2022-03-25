@@ -125,7 +125,7 @@
         </collision>
     </link>
 
-    <joint name="camera_joint" type="fixed">
+    <!-- <joint name="camera_joint" type="fixed">
         <parent link="trunk"/>
         <child link="camera_link"/>
         <origin rpy="0 0 0" xyz="0.35 0 0"/>
@@ -150,7 +150,7 @@
                 <box size=".001 .001 .001"/>
             </geometry>
         </collision>
-    </link>
+    </link> -->
 
     <joint name="laser_joint" type="fixed">
         <parent link="trunk"/>

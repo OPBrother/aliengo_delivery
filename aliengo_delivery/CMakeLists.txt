@@ -42,7 +42,7 @@ include
 
 
 add_library(${PROJECT_NAME}
-	src/lib_code/belt_control.cpp
+	src/lib_code/belt_control1.cpp
 )
 
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
@@ -51,6 +51,7 @@ target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
 )
+
 
 add_executable(belt_control_node src/belt_control_node.cpp)
 target_link_libraries(belt_control_node ${catkin_LIBRARIES} ${PROJECT_NAME})

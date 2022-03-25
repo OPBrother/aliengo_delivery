@@ -28,8 +28,8 @@ def posecallback(data):
     odom.pose.pose=data.pose[index]
     odom.twist.twist=data.twist[index]
     odom.header.stamp=rospy.Time.now()
-    odom.header.frame_id="odom"
-    odom.child_frame_id="base"
+    odom.header.frame_id="laikago_gazebo/odom"
+    odom.child_frame_id="/laikago_gazebo/base"
 
     odom_box.pose.pose=data.pose[index_2]
     odom_box.twist.twist=data.twist[index_2]
@@ -47,8 +47,8 @@ def posecallback(data):
     t = geometry_msgs.msg.TransformStamped()
 
     t.header.stamp = rospy.Time.now()
-    t.header.frame_id = "odom"
-    t.child_frame_id = "base"
+    t.header.frame_id = "laikago_gazebo/odom"
+    t.child_frame_id = "/laikago_gazebo/base"
     t.transform.translation.x = odom.pose.pose.position.x
     t.transform.translation.y = odom.pose.pose.position.y
     t.transform.translation.z = odom.pose.pose.position.z
